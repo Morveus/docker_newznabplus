@@ -1,0 +1,44 @@
+NewznabPlus installation in a Docker container
+======
+
+This is a simple project that creates a docker container for NewznabPlus. This container includes the following components:
+ * Newznab
+ * mysql server
+ * phpmyadmin
+
+This container is based on the instructions found here: newznab.readthedocs.org/en/latest/guides/install_ubuntu-14.04/
+
+# Getting started
+---
+## Step 1: Clone this repo
+```
+git clone https://github.com/dimaj/docker_newznabplus.git
+cd docker_newznabplus
+```
+
+## Step 2: Update configs
+### Edit the `files/nn_config.php` file by changing environment variables to fit your needs
+* db_root_pass  - Root password for mysql install
+* svn_user - Username for SVN repo to download newznabplus source code
+* svn_pass - Password for SVN repo to download newznabplus source from
+* php_timezone - Timezone of your machine
+* DB_NN_NAME - Name of a database to create in MySQL DB
+* NH_HOST - News provider hostname
+* NH_PORT - News provider port number
+* NH_USER - News provider username
+* NH_PASS - News provider password
+* NH_SSL - News provider is SSL enabled? (true/false)
+
+## Step 3: Build a container
+```
+docker build -t "newznabplus" .
+```
+
+## Step 4: Run this container
+```
+docker run --name "newznabplus" -d -i -p <local web port>:80 -p <local mysql port>:3306 -v <path to nzbs folder>:/nzbs newznabplus
+```
+Where:
+ * local web port = local port number that will be forwarded to container's port 80 for web access
+ * local mysql port = local port number that will be forwarded to container's port 3306 for mysql access
+ * path to nzbs folder = absolute path local folder that will contain cached nzb files
